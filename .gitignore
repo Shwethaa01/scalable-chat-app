@@ -16,3 +16,5 @@ client/.env
 # IDE/editor junk
 .vscode/
 .idea/
+
+node_modules/
