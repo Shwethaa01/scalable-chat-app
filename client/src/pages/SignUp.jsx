@@ -95,7 +95,7 @@ function SignUp() {
           />
           <button type="submit">Create User</button>
           <span>
-            Already have an account ? <Link to="/login">Login.</Link>
+            Already have an account ? <Link to="/signin">Login.</Link>
           </span>
         </form>
       </FormContainer>

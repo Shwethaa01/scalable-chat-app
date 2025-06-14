@@ -68,7 +68,7 @@ function SignIn() {
           />
           <button type="submit">Log In</button>
           <span>
-            Don't have an account ? <Link to="/register">Create One.</Link>
+            Don't have an account ? <Link to="/signup">Create One.</Link>
           </span>
         </form>
       </FormContainer>
