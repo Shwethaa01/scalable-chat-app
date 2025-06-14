@@ -1,11 +1,13 @@
 # Node / Express
 server/node_modules/
 server/.env
+server/dist/
 
 # React
 client/node_modules/
 client/build/
 client/.env
+client/dist/
 
 # Global logs
 *.log
@@ -18,3 +20,4 @@ client/.env
 .idea/
 
 node_modules/
+.env
