@@ -1,0 +1,18 @@
+# Node / Express
+server/node_modules/
+server/.env
+
+# React
+client/node_modules/
+client/build/
+client/.env
+
+# Global logs
+*.log
+
+# OS files
+.DS_Store
+
+# IDE/editor junk
+.vscode/
+.idea/
