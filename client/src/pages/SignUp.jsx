@@ -1,51 +1,31 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import { showError } from "../utils/toast";
 import styled from "styled-components";
+import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 function SignUp() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const phoneNo = searchParams.get("phoneNo");
+
   const [values, setValues] = useState({
+    phoneNo: phoneNo,
     username: "",
     email: "",
-    password: "",
-    confirmPassword: "",
   });
 
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
-
   const handleValidation = () => {
-    const { password, confirmPassword, username, email } = values;
-    if (password !== confirmPassword) {
-      toast.error(
-        "Password and confirm password should be same.",
-        toastOptions
-      );
-      return false;
-    } else if (username.length < 3) {
-      toast.error(
-        "Username should be greater than 3 characters.",
-        toastOptions
-      );
-      return false;
-    } else if (password.length < 8) {
-      toast.error(
-        "Password should be equal or greater than 8 characters.",
-        toastOptions
-      );
+    const { username, email } = values;
+    if (username.length < 3) {
+      showError("Username should be greater than 3 characters.");
       return false;
     } else if (email === "") {
-      toast.error("Email is required.", toastOptions);
+      showError("Email is required.");
       return false;
     }
-
     return true;
   };
 
@@ -56,8 +36,17 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
-      const { password, confirmPassword, username, email } = values;
-      console.log(values);
+      const { username, email } = values;
+
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/auth/signup",
+          values
+        );
+        navigate("/");
+      } catch (e) {
+        showError("Failed to create user");
+      }
     }
   };
 
@@ -81,25 +70,12 @@ function SignUp() {
             name="email"
             onChange={(e) => handleChange(e)}
           />
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={(e) => handleChange(e)}
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            name="confirmPassword"
-            onChange={(e) => handleChange(e)}
-          />
           <button type="submit">Create User</button>
           <span>
             Already have an account ? <Link to="/signin">Login.</Link>
           </span>
         </form>
       </FormContainer>
-      <ToastContainer />
     </>
   );
 }

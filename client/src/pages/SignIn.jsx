@@ -1,78 +1,83 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-
-import "react-toastify/dist/ReactToastify.css";
-
 import styled from "styled-components";
+import OtpVerify from "../components/OtpVerify";
+import { showError } from "../utils/toast";
+import axios from "axios";
+import { IoArrowBack } from "react-icons/io5";
 
 function SignIn() {
   const navigate = useNavigate();
 
-  const [values, setValues] = useState({
-    username: "",
-    password: "",
-  });
+  const [step, setStep] = useState("phone");
+  const [phoneNo, setPhoneNo] = useState("");
 
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
+  const isValidPhoneNumber = (phone) => {
+    const regex = /^((\+91?)|\+)?[7-9][0-9]{9}$/; // Indian phone format
+    return regex.test(phone);
   };
 
-  const handleValidation = () => {
-    const { username, password } = values;
-    if (username === "") {
-      toast.error("Email and Password is required.", toastOptions);
-      return false;
-    } else if (password === "") {
-      toast.error("Email and Password is required.", toastOptions);
-      return false;
-    }
-    return true;
-  };
-
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const sendOtp = async (e) => {
     e.preventDefault();
-    if (handleValidation()) {
-      const { username, password } = values;
-      console.log(values);
+    if (isValidPhoneNumber(phoneNo)) {
+      try {
+        await axios.post("http://localhost:5000/api/auth/send-otp", {
+          phoneNo,
+        });
+        setStep("otp");
+      } catch (err) {
+        showError("Failed to send OTP");
+      }
+    } else {
+      showError("Invalid phoneno.");
     }
+  };
+
+  const handleOtpSuccess = (status, phone) => {
+    if (status === "signup") {
+      navigate(`/signup?phoneNo=${phone}`);
+    } else {
+      navigate("/chat");
+    }
+  };
+
+  const handleBackButton = () => {
+    setStep("phone");
   };
 
   return (
     <>
       <FormContainer>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form>
           <div className="brand">
-            <img src="" alt="" />
             <h1>Chat</h1>
           </div>
-          <input
-            type="text"
-            placeholder="Username"
-            name="username"
-            onChange={(e) => handleChange(e)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            onChange={(e) => handleChange(e)}
-          />
-          <button type="submit">Log In</button>
-          <span>
-            Don't have an account ? <Link to="/signup">Create One.</Link>
-          </span>
+
+          {step === "phone" && (
+            <div>
+              <input
+                type="text"
+                placeholder="Enter phone number"
+                name="phoneno"
+                onChange={(e) => setPhoneNo(e.target.value)}
+              />
+              <button type="submit" onClick={(e) => sendOtp(e)}>
+                Send OTP
+              </button>
+            </div>
+          )}
+
+          {step === "otp" && (
+            <>
+              <IoArrowBack onClick={handleBackButton} size="22" color="black" />
+              <OtpVerify
+                phoneNo={phoneNo}
+                handleOtpSuccess={handleOtpSuccess}
+              />
+            </>
+          )}
         </form>
       </FormContainer>
-      <ToastContainer />
     </>
   );
 }
@@ -119,7 +124,6 @@ const FormContainer = styled.div`
     border: 0.1rem solid white;
     border-radius: 0.4rem;
     color: grey;
-    width: 100%;
     font-size: 1rem;
     &:focus {
       border: 0.1rem solid #25d366;
