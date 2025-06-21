@@ -37,6 +37,13 @@ function SignIn() {
     setStep("phone");
   };
 
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <>
       <FormContainer>

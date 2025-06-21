@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import axios from "axios";
 import { showError, showSuccess } from "../utils/toast";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function OtpVerify({ phoneNo }) {
+  const navigate = useNavigate();
+
   const [otp, setOtp] = useState("");
 
   const handleVerify = async (e) => {
@@ -25,7 +28,7 @@ export default function OtpVerify({ phoneNo }) {
   };
 
   // resend otp logic
-  const timerValue = 10;
+  const timerValue = 60;
   const [resendTimer, setResendTimer] = useState(timerValue);
   const [isResending, setIsResending] = useState(false);
 

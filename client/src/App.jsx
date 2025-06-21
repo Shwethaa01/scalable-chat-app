@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Chat from "./pages/Chat";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/" element={<Chat />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
