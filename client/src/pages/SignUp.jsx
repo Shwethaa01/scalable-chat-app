@@ -43,6 +43,7 @@ function SignUp() {
           "http://localhost:5000/api/auth/signup",
           values
         );
+        localStorage.setItem("token", res.data.token);
         navigate("/");
       } catch (e) {
         showError("Failed to create user");

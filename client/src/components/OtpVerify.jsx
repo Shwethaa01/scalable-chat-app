@@ -3,7 +3,7 @@ import OtpInput from "react-otp-input";
 import axios from "axios";
 import { showError, showSuccess } from "../utils/toast";
 
-export default function OtpVerify({ phoneNo, handleOtpSuccess }) {
+export default function OtpVerify({ phoneNo }) {
   const [otp, setOtp] = useState("");
 
   const handleVerify = async (e) => {
@@ -14,13 +14,13 @@ export default function OtpVerify({ phoneNo, handleOtpSuccess }) {
         { phoneNo, otp }
       );
       if (res.data.newUser) {
-        handleOtpSuccess("signup", phoneNo);
+        navigate(`/signup?phoneNo=${phoneNo}`);
       } else {
         localStorage.setItem("token", res.data.token);
-        handleOtpSuccess("chat");
+        navigate("/");
       }
     } catch (err) {
-      showError("Failed to send OTP");
+      showError("Failed to send OTP" + err);
     }
   };
 

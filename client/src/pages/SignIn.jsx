@@ -33,14 +33,6 @@ function SignIn() {
     }
   };
 
-  const handleOtpSuccess = (status, phone) => {
-    if (status === "signup") {
-      navigate(`/signup?phoneNo=${phone}`);
-    } else {
-      navigate("/chat");
-    }
-  };
-
   const handleBackButton = () => {
     setStep("phone");
   };
@@ -70,10 +62,7 @@ function SignIn() {
           {step === "otp" && (
             <>
               <IoArrowBack onClick={handleBackButton} size="22" color="black" />
-              <OtpVerify
-                phoneNo={phoneNo}
-                handleOtpSuccess={handleOtpSuccess}
-              />
+              <OtpVerify phoneNo={phoneNo} />
             </>
           )}
         </form>
