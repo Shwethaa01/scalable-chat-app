@@ -8,6 +8,7 @@ import { connectDB } from "./config/mongoose.js"
 import { connectRedis } from "./config/redis.js"
 import { twilioClient } from './config/twilio.js';
 import authRoutes from './routes/authRoutes.js';
+import contactRoutes from './routes/contactRoutes.js'
 import { initSocket } from './socketHandler.js';
 
 const app = express();
@@ -17,6 +18,7 @@ initSocket(server);
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/contacts', contactRoutes);
 
 await connectDB();
 await connectRedis();

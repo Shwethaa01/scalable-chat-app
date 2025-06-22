@@ -16,6 +16,7 @@ export const sendOTP = async (phoneNo) => {
 
         // Send SMS using Twilio
         const formattedPhone = String(phoneNo).startsWith("+") ? String(phoneNo) : `+91${phoneNo}`;
+        console.log("formattedPhone : " + formattedPhone)
         const message = await client.messages.create({
             body: `Your OTP code is ${otp}`,
             from: process.env.TWILIO_PHONE_NUMBER,
